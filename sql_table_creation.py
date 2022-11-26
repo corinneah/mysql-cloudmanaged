@@ -28,7 +28,7 @@ create table if not exists patients (
     gender varchar(255) default null,
     pronouns varchar(255) default null,
     insurance varchar(255) default null,
-    phone_number varchar(255) default null,
+    contact_number varchar(255) default null,
     PRIMARY KEY (id) 
 ); 
 """
