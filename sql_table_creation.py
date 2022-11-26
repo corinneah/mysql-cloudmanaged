@@ -75,3 +75,4 @@ db.execute(table_patient_conditions)
 db.execute(table_social_determinants)
 
 gcp_tables = db.table_names()
+

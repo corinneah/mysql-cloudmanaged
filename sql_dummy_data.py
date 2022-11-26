@@ -70,6 +70,7 @@ ndc_codes_1k = ndc_codes_1k.drop_duplicates(subset=['PRODUCTNDC'], keep='first')
 # real cpt codes ###
 cpt_codes = pd.read_csv('https://gist.githubusercontent.com/lieldulev/439793dc3c5a6613b661c33d71fdd185/raw/25c3abcc5c24e640a0a5da1ee04198a824bf58fa/cpt4.csv')
 list(cpt_codes.columns)
+new_cpt_codes = cpt_codes.rename(columns={'com.medigy.persist.reference.type.clincial.CPT.code':'CPT_code', 'label':'CPT_description'})
 new_cpt_codes = cpt_codes.sample(n=1000, random_state=1)
 
 # drop duplicates from cpt_codes_1k
@@ -134,14 +135,13 @@ for index, row in loinc_codes_1k.iterrows():
 
  ##Inserting Treatment Process 
 
-insertQuery = "INSERT INTO treatment_process (CPT_code, CPT_description) VALUES (%s, %s)"
-startingRow = 0
+insertQuery = "INSERT INTO treatment_process (desciption, cpt_codes) VALUES (%s, %s)"
+
+startingRow= 0
 for index, row in new_cpt_codes.iterrows():
     startingRow += 1
-    print('startingRow: ', startingRow)
-    print("inserted row db_azure: ", index)
-    db.execute(insertQuery, (row['CPT_code'], row['CPT_description']))
-    print("inserted row db_gcp: ", index)
+    db.execute(insertQuery, (row['label'], row['com.medigy.persist.reference.type.clincial.CPT.code']))
+    print("inserted row: ", index)
     ## stop once we have 100 rows
     if startingRow == 100:
         break
